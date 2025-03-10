@@ -6,8 +6,6 @@ import Loading from "../loading/loading";
 const Discover = () => {
     return (
         <div>
-            this is the top bar
-            <br />
             <br />
             <Link to='/discover'>推荐</Link>
             <Link to='/discover/toplist'>排行榜</Link>

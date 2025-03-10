@@ -7,14 +7,19 @@ import { Provider } from 'react-redux';
 
 import App from '@/App';
 import store from './store';
-
+//用自定义的theme包裹
+import { ThemeProvider } from 'styled-components';
+import theme from './assets/theme/theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </ThemeProvider>
+
     </Provider>
 
 );

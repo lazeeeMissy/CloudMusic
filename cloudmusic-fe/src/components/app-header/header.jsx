@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import './style'
 import { HeaderLeft, HeaderRight, HeaderWrapper } from "./style";
-import { Button, Input } from "antd";
+import { Input } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 
 import headerTitles from '@/assets/data/header-titles.json'
@@ -18,7 +18,7 @@ const Header = () => {
             </NavLink>
         }
     }
-    const showDivider = !(location.pathname==="/discover");
+    const showDivider = location.pathname.search("/discover")==-1;
     return (
         <HeaderWrapper>
             <div className="content">

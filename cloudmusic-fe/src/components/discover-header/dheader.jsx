@@ -12,7 +12,7 @@ const DHeader = () => {
                     {headerTitles.map(item => {
                         return (
                             <li className='item' key={item.name}>
-                                <NavLink to={item.path}>{item.name}</NavLink>
+                                <NavLink to={item.path} end>{item.name}</NavLink>
                             </li>
                         )
                     })}

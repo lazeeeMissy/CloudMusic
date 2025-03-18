@@ -27,6 +27,11 @@ export const HeaderWrapper = styled.div`
                 background-color: #9b0909;
                 border-radius: 16px;
             }
+            .active{
+                background-color: #9b0909;
+                border-radius: 16px;
+            }
+
             
         }
     }

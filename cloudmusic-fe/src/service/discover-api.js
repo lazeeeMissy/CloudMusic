@@ -10,3 +10,7 @@ export async function getHomeHotPlaylist(){
     return await request.get('/personalized');
 
 }
+
+export async function getHomeNewAlbum(){
+    return await request.get('/album/newest');
+}

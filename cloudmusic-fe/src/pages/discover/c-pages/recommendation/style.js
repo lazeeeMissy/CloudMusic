@@ -7,13 +7,10 @@ export const  RecommendationWrapper  = styled.div`
 
 export const RecmdContent = styled.div`
     display: flex;
-    height: 800px;
-
 `
 
 export const LeftWrapper = styled.div`
     width: 729px;
-    height: 800px;
     padding: 20px 20px 40px 20px;
     display: block;
 `
@@ -24,6 +21,33 @@ export const RightWrapper = styled.div`
 
     float: right;
     display: block;
-    height: 800px;
+`
 
+export const HotWrapperUl = styled.ul`
+    margin: 30px 0 0 -42px;
+    padding: 0;
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    .hotItem{
+        margin-bottom: 8px;
+    }
+    li{
+        width: 140px;
+        height: 234px;
+        padding-left: 42px;
+        overflow: hidden;
+        display: inline-block;
+        line-height: 1.4;
+    }
+    .dec{
+        color: #000;
+        font-size: 14px;
+
+        cursor: pointer;
+        &:hover{
+            text-decoration: underline;
+        }
+    }
 `

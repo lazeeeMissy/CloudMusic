@@ -1,14 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBanners, getHomeHotPlaylist } from "../../service/discover-api";
-
-export const fetchBannersAction = createAsyncThunk("fetchBanners", async ()=>{
+import { getBanners, getHomeHotPlaylist, getHomeNewAlbum } from "../../service/discover-api";
+//Promise.all 的作用
+//1. 并行处理异步操作，提高性能，减少等待时间。
+//2. 错误捕获统一，如果有一个失败，就会进入 catch。
+const fetchBannersAction = createAsyncThunk("fetchBanners", async ()=>{
     const res = await getBanners();
     return res.data.banners;
 })
 
-export const fetchHomeHotPlaylist = createAsyncThunk("fetchHomeHotPlaylist", async ()=>{
+const fetchHomeHotPlaylist = createAsyncThunk("fetchHomeHotPlaylist", async ()=>{
     const res = await getHomeHotPlaylist();
     return res.data.result;
+})
+
+const fetchNewAlbumAction = createAsyncThunk("fetchNewAlbums",async ()=>{
+    const res = await getHomeNewAlbum();
+    console.log(res.data.albums);
+    return res.data.albums;
+})
+
+export const fetchRecommendationData = createAsyncThunk("recommend/fetchRecommendationData", async(_,{dispatch})=>{
+    await Promise.all([
+        dispatch(fetchBannersAction()),
+        dispatch(fetchHomeHotPlaylist()),
+        dispatch(fetchNewAlbumAction()),
+    ])
 })
 
 const recommendSlice = createSlice({
@@ -16,24 +32,21 @@ const recommendSlice = createSlice({
     initialState:{
         banners:[],
         hotPlaylist:[],
+        newAlbums:[],
     },
     reducers:{},
     extraReducers:(builder)=>{
-        builder.addCase(fetchBannersAction.pending, (state, action)=>{
-            
-        })
-        .addCase(fetchBannersAction.fulfilled, (state, action)=>{
+    
+        builder.addCase(fetchBannersAction.fulfilled, (state, action)=>{
             state.banners = action.payload;
-        }).addCase(fetchBannersAction.rejected, (state, action)=>{
-            console.log("Request is rejected!")
-        })
-
-        builder.addCase(fetchHomeHotPlaylist.pending, (state)=>{
-            console.log("HotPlaylist is loading");
         }).addCase(fetchHomeHotPlaylist.fulfilled, (state, {payload})=>{
             state.hotPlaylist = payload;
-        }).addCase(fetchHomeHotPlaylist.rejected, (state)=>{
-            console.log("hot playlist request is rejected!");
+        }).addCase(fetchNewAlbumAction.fulfilled, (state, {payload})=>{
+            state.newAlbums = payload;
+        }).addCase(fetchRecommendationData.pending, ()=>{
+            console.log("loading data")
+        }).addCase(fetchRecommendationData.rejected,()=>{
+            console.log("failed to loading")
         })
     }
 

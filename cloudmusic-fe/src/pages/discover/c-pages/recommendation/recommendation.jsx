@@ -1,62 +1,77 @@
 import Banners from "../../../../components/discover-banners/banners";
 import './style'
-import { LeftWrapper, RecmdContent, RecommendationWrapper, RightWrapper } from "./style";
-import AreaTopBar from "../../../../components/area-topbar/area-topbar";
+import { LeftWrapper, RecmdContent, RecommendationWrapper, RightWrapper,HotWrapperUl } from "./style";
+import AreaTopBar from "../../../../components/recommend-area-topbar/area-topbar";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchHomeHotPlaylist } from "../../../../store/discover/recommend";
+import { fetchRecommendationData } from "../../../../store/discover/recommend";
+
+import RecommenPicture from "../../../../components/recommen-pic-compo/recommenpicture";
+import NewAlbum from "./newalbum/newalbum";
 // 推荐里有banners
-const Recommendation = ()=>{
-    const hotRecommendation = {
-      title:"热门推荐",
-      tabs:["华语","流行","摇滚","民谣","电子"],
-      link:'/discover/playlist'
-    }
+const Recommendation = () => {
+  ///playlist/hot 可以获取歌单
+  const hotRecommendation = {
+    title: "热门推荐",
+    tabs: ["华语", "流行", "摇滚", "民谣", "电子"],
+    link: '/discover/playlist'
+  }
 
-    const dispatch = useDispatch();
-    const {hotPlaylist} = useSelector((state)=>({
-      hotPlaylist: state.recommend.hotPlaylist
-    }))
-    //Fisher-Yates 洗牌算法
-    const shuffleList = (arr)=>{
-      const shuffled = [...arr];
-      for(let i=shuffled.length-1; i>0 ; i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];//exchange the item
-      }
-      return shuffled;
-    }
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchRecommendationData())
+  }, [dispatch])
+
   
-    useEffect(()=>{
-      dispatch(fetchHomeHotPlaylist())
-    },[dispatch])
-    const randomHotPlaylist = shuffleList(hotPlaylist).slice(0,8)
+  const {banners,  hotPlaylist, newAlbums } = useSelector((state) => ({
+    //优化
+    hotPlaylist: state.recommend.hotPlaylist,
+    banners:state.recommend.banners,
+    newAlbums: state.recommend.newAlbums,
+  }))
+  //Fisher-Yates 洗牌算法
+  const shuffleList = (arr) => {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];//exchange the item
+    }
+    return shuffled;
+  }
 
-    return (
-      <div>
-        <Banners/>
-        <RecommendationWrapper >
-          <RecmdContent >
-              <LeftWrapper>
-                <AreaTopBar {...hotRecommendation}/>
-                {
-                  randomHotPlaylist?.map(item=>{
-                    return (
-                      <div key={item.id}>
-                          {item.name}
+  const randomHotPlaylist = shuffleList(hotPlaylist).slice(0, 8)
 
+  return (
+    <div>
+      <Banners banners={banners} />
+      <RecommendationWrapper >
+        <RecmdContent >
+          <LeftWrapper>
+            <AreaTopBar {...hotRecommendation} />
+            <HotWrapperUl>
+              {
+                randomHotPlaylist?.map(item => {
+                  return (
+                    <li  key={item.id} >
+                      <div className="hotItem">
+                        <RecommenPicture id={item.id} picUrl={item.picUrl} name={item.name} playCount={item.playCount} />
                       </div>
-                    )
-                  })
-                }
-              </LeftWrapper>
-              <RightWrapper>
-                这是右边
-              </RightWrapper>
-          </RecmdContent>
-        </RecommendationWrapper>
-      </div>
-    )
+                      <a className="dec" href="/discover">{item.name}</a>
+
+                    </li>
+                  )
+                })
+              }
+            </HotWrapperUl>
+            <NewAlbum newAlbums = {newAlbums}/>
+          </LeftWrapper>
+          <RightWrapper>
+            这是右边
+          </RightWrapper>
+        </RecmdContent>
+      </RecommendationWrapper>
+    </div>
+  )
 }
 
 export default Recommendation;

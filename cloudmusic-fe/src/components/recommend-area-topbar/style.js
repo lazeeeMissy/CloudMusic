@@ -8,6 +8,7 @@ export const BarWrapper = styled.div`
     height: 33px;
     background-position: -225px -156px;
     border-bottom: 2px solid #C10D0C;
+    margin-bottom: 20px;
     a{
         font-size: 20px;
         color: #333333;
@@ -23,12 +24,12 @@ export const BarWrapper = styled.div`
     .tabs{
         float: left;
         display: flex;
-        margin: 7px 0 0 20px;
+        margin: 8px 5px 0 20px;
         align-items: center;
         
         .item{
             position: relative;
-            
+            margin: 0 2px 3px 0;
             .sub-tab{
             font-size: 12px;
             color: #666;

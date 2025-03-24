@@ -1,23 +1,14 @@
 import { Carousel } from "antd";
 import classNames from "classnames";
 import './style'
-import { useEffect, useRef, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { fetchBannersAction } from '../../store/discover/recommend';
+import { useRef, useState } from 'react';
+
 import { BannerControl, BannerWrapper, LeftContent, RightContent, ContentWrapper } from './style';
 import { wait } from "@testing-library/user-event/dist/utils";
 // banner组成: 一个背景图(模糊效果);一个淡入淡出的banner; 一个下载客户端的图片;一个左右按钮;一个圆圈显示
-const Banners = () => {
+const Banners = ({banners}) => {
     //获取数据
-    const dispatch = useDispatch();
     const [currentIndex, setCurrentIndex] = useState(0)
-    const { banners } = useSelector((state) => ({
-        banners: state.recommend.banners
-    }), shallowEqual) //复习
-    useEffect(() => {
-        dispatch(fetchBannersAction());
-
-    }, [dispatch])
     //设置背景
     const [bgImgURL, setBgImgURL] = useState(banners[0]?.imageUrl+"?imageView&blur=40x20");
     const handleAfterChange = (next)=>{

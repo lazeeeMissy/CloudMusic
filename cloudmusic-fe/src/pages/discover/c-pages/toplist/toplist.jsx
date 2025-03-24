@@ -1,7 +1,6 @@
-
 const Toplist = ()=>{
     return (
-        <div>this is the Toplist</div>
+        <div>this is top list</div>
     )
 }
 

@@ -4,10 +4,12 @@ import { LeftWrapper, RecmdContent, RecommendationWrapper, RightWrapper,HotWrapp
 import AreaTopBar from "../../../../components/recommend-area-topbar/area-topbar";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchRecommendationData } from "../../../../store/discover/recommend";
+import { fetchRankListAction, fetchRecommendationData } from "../../../../store/discover/recommend";
 
 import RecommenPicture from "../../../../components/recommen-pic-compo/recommenpicture";
 import NewAlbum from "./newalbum/newalbum";
+import RankList from "./ranklist/ranklist";
+
 // 推荐里有banners
 const Recommendation = () => {
   ///playlist/hot 可以获取歌单
@@ -19,15 +21,17 @@ const Recommendation = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchRecommendationData())
+    dispatch(fetchRecommendationData());
+    dispatch(fetchRankListAction())
   }, [dispatch])
 
   
-  const {banners,  hotPlaylist, newAlbums } = useSelector((state) => ({
+  const {banners, hotPlaylist, newAlbums, rankings} = useSelector((state) => ({
     //优化
     hotPlaylist: state.recommend.hotPlaylist,
     banners:state.recommend.banners,
     newAlbums: state.recommend.newAlbums,
+    rankings: state.recommend.rankings,
   }))
   //Fisher-Yates 洗牌算法
   const shuffleList = (arr) => {
@@ -64,6 +68,7 @@ const Recommendation = () => {
               }
             </HotWrapperUl>
             <NewAlbum newAlbums = {newAlbums}/>
+            <RankList rankings = {rankings}/>
           </LeftWrapper>
           <RightWrapper>
             这是右边

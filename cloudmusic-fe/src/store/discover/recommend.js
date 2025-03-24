@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBanners, getHomeHotPlaylist, getHomeNewAlbum } from "../../service/discover-api";
+import { getBanners, getHomeHotPlaylist, getHomeNewAlbum, getRankList } from "../../service/discover-api";
 //Promise.all 的作用
 //1. 并行处理异步操作，提高性能，减少等待时间。
 //2. 错误捕获统一，如果有一个失败，就会进入 catch。
@@ -15,7 +15,6 @@ const fetchHomeHotPlaylist = createAsyncThunk("fetchHomeHotPlaylist", async ()=>
 
 const fetchNewAlbumAction = createAsyncThunk("fetchNewAlbums",async ()=>{
     const res = await getHomeNewAlbum();
-    console.log(res.data.albums);
     return res.data.albums;
 })
 
@@ -27,12 +26,26 @@ export const fetchRecommendationData = createAsyncThunk("recommend/fetchRecommen
     ])
 })
 
+const rankingList=[19723756, 3779629, 2884035]
+export const fetchRankListAction = createAsyncThunk("fetchRankListAction",async()=>{
+    // let results= [];
+    // for(const id of rankingList){
+    //     await getRankList(id).then((res)=>{
+    //         results.push(res);
+    //     });
+    // }
+    const results = await Promise.all(rankingList.map(id => getRankList(id)));
+    return results;
+
+})
+
 const recommendSlice = createSlice({
     name:'recommend',
     initialState:{
         banners:[],
         hotPlaylist:[],
         newAlbums:[],
+        rankings:[],
     },
     reducers:{},
     extraReducers:(builder)=>{
@@ -47,6 +60,8 @@ const recommendSlice = createSlice({
             console.log("loading data")
         }).addCase(fetchRecommendationData.rejected,()=>{
             console.log("failed to loading")
+        }).addCase(fetchRankListAction.fulfilled, (state, {payload})=>{
+            state.rankings = payload;
         })
     }
 

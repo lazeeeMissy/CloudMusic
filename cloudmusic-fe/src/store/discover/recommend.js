@@ -28,12 +28,6 @@ export const fetchRecommendationData = createAsyncThunk("recommend/fetchRecommen
 
 const rankingList=[19723756, 3779629, 2884035]
 export const fetchRankListAction = createAsyncThunk("fetchRankListAction",async()=>{
-    // let results= [];
-    // for(const id of rankingList){
-    //     await getRankList(id).then((res)=>{
-    //         results.push(res);
-    //     });
-    // }
     const results = await Promise.all(rankingList.map(id => getRankList(id)));
     return results;
 

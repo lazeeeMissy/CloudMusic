@@ -9,7 +9,10 @@ import { fetchRankListAction, fetchRecommendationData } from "../../../../store/
 import RecommenPicture from "../../../../components/recommen-pic-compo/recommenpicture";
 import NewAlbum from "./newalbum/newalbum";
 import RankList from "./ranklist/ranklist";
-
+import vipPic from "../../../../assets/img/dis_vip_card.png"
+import LoginCom from "./login/loginCom";
+import ResidentSinger from "./residentsinger/residentsinger";
+import Anchors from "./anchors/anchors";
 // 推荐里有banners
 const Recommendation = () => {
   ///playlist/hot 可以获取歌单
@@ -71,7 +74,12 @@ const Recommendation = () => {
             <RankList rankings = {rankings}/>
           </LeftWrapper>
           <RightWrapper>
-            这是右边
+            <div className="dis-vip">
+              <img src={vipPic} className="vip-img"/>
+            </div>
+            <LoginCom/>
+            <ResidentSinger/>
+            <Anchors/>
           </RightWrapper>
         </RecmdContent>
       </RecommendationWrapper>

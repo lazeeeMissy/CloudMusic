@@ -10,7 +10,7 @@ export const RecmdContent = styled.div`
 `
 
 export const LeftWrapper = styled.div`
-    width: 729px;
+    width: 689px;
     padding: 20px 20px 40px 20px;
     display: block;
 `
@@ -18,9 +18,16 @@ export const RightWrapper = styled.div`
     width: 250px;
     position: relative;
     margin-left: 1px;
-
     float: right;
     display: block;
+    .dis-vip{
+        margin-top: 5px;
+        width: 100%;
+        .vip-img{
+            cursor: pointer;
+            width: 100%;
+        }
+    }
 `
 
 export const HotWrapperUl = styled.ul`

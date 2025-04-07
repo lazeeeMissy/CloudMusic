@@ -1,6 +1,6 @@
 import './style'
 import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper } from './style'
-
+import { Slider } from 'antd'
 const PlayerFooter = () => {
     return (
         <PlayerFooterWrapper>
@@ -17,7 +17,20 @@ const PlayerFooter = () => {
                         <a href='/' className='mask'>cover</a>
                     </div>
                     <div className='play-bar content-div'>
-                        <span className='title'>title</span>
+                        <div>
+                            <span className='song-name'>title</span>
+                            <span className='singer-name'>title</span>
+                        </div>
+                        <div className='progress-com'>
+                        <Slider className='progress-bar' defaultValue={30}  />
+                        <span className='time-wrapper'>
+                            <em className='current-time'>00:00</em>
+                            <em> / </em>
+                            <em className='duration'>00:00</em>
+                        </span>
+                        
+                        
+                        </div>
                     </div>
                     <div className='operators content-div'>
                         <span className='pip icons' title='画中画歌词'>画中画歌词</span>

@@ -136,6 +136,65 @@ export const PlayerFooterContentWrapper = styled.div`
     }
     .play-bar{
         width: 581px;
+        display: block;
+        .song-name{
+            color: #e1e1e1;
+            position: relative;
+            top:8px;
+            left: 8px;
+        }
+        .singer-name{
+            position: relative;
+            color: #a1a1a1;
+            margin-left: 12px;
+            top:8px;
+
+        }
+        .progress-com{
+            display: flex;
+            .progress-bar{
+                width: 490px;
+                .ant-slider{
+                    position: relative;
+                    top:-3px;
+                    width: 493px;
+                    margin-right: 10px;
+                }
+                .ant-slider-rail{
+                    height: 9px;
+                    background:url(${require('../../../assets/img/fram/statbar.png')}) right 0;
+                }
+                .ant-slider-track{
+                    height: 9px;
+                    background:url(${require('../../../assets/img/fram/statbar.png')}) left -66px;
+                }
+                .ant-slider-handle{
+                    width: 22px;
+                    height: 24px;
+                    border: none;
+                    margin-top: -5px;
+                    background:url(${require('../../../assets/img/iconall.png')}) 0 -250px;
+                    &:hover{
+                    background:url(${require('../../../assets/img/iconall.png')}) 0 -280px;
+                    }
+                }
+                .ant-slider-handle::after{
+                    display: none;
+                }
+            }
+            
+        }
+        .time-wrapper{
+            align-content: center;
+            .current-time{
+                color: #a1a1a1;
+            }
+        }
+        em{
+            color: #797979;
+            text-decoration: none;
+            font-size: 12px;
+        }
     }
 
     .icons{

@@ -1,0 +1,174 @@
+{
+    "songs": [
+      {
+        "name": "红",
+        "mainTitle": null,
+        "additionalTitle": null,
+        "id": 1918576268,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 33863232,
+            "name": "罗言",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 100,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 40,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 140087138,
+          "name": "When the world is came，take it！",
+          "picUrl": "https://p1.music.126.net/G-inyKjA-jO5MuOuV3g7Pg==/109951167027986653.jpg",
+          "tns": [],
+          "pic_str": "109951167027986653",
+          "pic": 109951167027986660
+        },
+        "dt": 161585,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 6465695,
+          "vd": -44158,
+          "sr": 48000
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 3879455,
+          "vd": -41539,
+          "sr": 48000
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 2586335,
+          "vd": -39824,
+          "sr": 48000
+        },
+        "sq": {
+          "br": 866760,
+          "fid": 0,
+          "size": 17506965,
+          "vd": -44159,
+          "sr": 48000
+        },
+        "hr": {
+          "br": 1636419,
+          "fid": 0,
+          "size": 33052675,
+          "vd": -44148,
+          "sr": 48000
+        },
+        "a": null,
+        "cd": "02",
+        "no": 9,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 17716748288,
+        "originCoverType": 1,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 21,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "awardTags": null,
+        "displayTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "mv": 0,
+        "rtype": 0,
+        "rurl": null,
+        "mst": 9,
+        "cp": 0,
+        "publishTime": 1644336000000,
+        "tns": [
+          "4U"
+        ]
+      }
+    ],
+    "privileges": [
+      {
+        "id": 1918576268,
+        "fee": 8,
+        "payed": 0,
+        "st": 0,
+        "pl": 128000,
+        "dl": 0,
+        "sp": 7,
+        "cp": 1,
+        "subp": 1,
+        "cs": false,
+        "maxbr": 999000,
+        "fl": 320000,
+        "toast": false,
+        "flag": 4,
+        "preSell": false,
+        "playMaxbr": 999000,
+        "downloadMaxbr": 999000,
+        "maxBrLevel": "hires",
+        "playMaxBrLevel": "hires",
+        "downloadMaxBrLevel": "hires",
+        "plLevel": "standard",
+        "dlLevel": "none",
+        "flLevel": "exhigh",
+        "rscl": null,
+        "freeTrialPrivilege": {
+          "resConsumable": false,
+          "userConsumable": false,
+          "listenType": null,
+          "cannotListenReason": null,
+          "playReason": null,
+          "freeLimitTagType": null
+        },
+        "rightSource": 0,
+        "chargeInfoList": [
+          {
+            "rate": 128000,
+            "chargeUrl": null,
+            "chargeMessage": null,
+            "chargeType": 0
+          },
+          {
+            "rate": 192000,
+            "chargeUrl": null,
+            "chargeMessage": null,
+            "chargeType": 0
+          },
+          {
+            "rate": 320000,
+            "chargeUrl": null,
+            "chargeMessage": null,
+            "chargeType": 0
+          },
+          {
+            "rate": 999000,
+            "chargeUrl": null,
+            "chargeMessage": null,
+            "chargeType": 1
+          },
+          {
+            "rate": 1999000,
+            "chargeUrl": null,
+            "chargeMessage": null,
+            "chargeType": 1
+          }
+        ],
+        "code": 0,
+        "message": null
+      }
+    ],
+    "code": 200
+  }

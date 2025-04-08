@@ -1,7 +1,67 @@
+import { useDispatch, useSelector } from 'react-redux'
 import './style'
 import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper } from './style'
 import { Slider } from 'antd'
+import { getFormattedTime, getImgSize } from '../../../utils/format'
+import {  useEffect, useRef, useState } from 'react'
+import classNames from 'classnames'
+import { fetchPlayLink } from '../../../store/player/player'
+
 const PlayerFooter = () => {
+
+    const {currentSong,playLink} = useSelector((state)=>({
+        currentSong: state.player.currentSong.songs[0],
+        playLink:state.player.playLink,
+    }))
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [progress, setProgree] = useState(0);
+    const audioRef = useRef(null);
+    const dispatch = useDispatch();
+// 获取当前歌曲信息
+    useEffect(()=>{
+        if (currentSong?.id) {
+            dispatch(fetchPlayLink(currentSong.id));
+          }
+    },[currentSong,dispatch])
+// 获取歌曲播放url
+    useEffect(()=>{
+        if(audioRef.current && playLink.length>0){
+            audioRef.current.src = playLink[0].url;
+        }
+    },[playLink])
+// 播放/暂停按钮
+    const handlePlayPause = ()=>{
+        if(!audioRef.current) return;
+        if(isPlaying){
+            audioRef.current.pause();
+        }else{
+            audioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+
+    }
+//实时显示时间和进度
+    const handleTimeUpdate = ()=>{
+        if(!isDragging){
+            setCurrentTime(audioRef.current.currentTime);
+            setProgree(Math.floor(audioRef.current.currentTime*1000*100/currentSong.dt));
+        }
+    }
+    //
+    const handleDragging = (value)=>{
+        setIsDragging(true);
+        setProgree(value);
+        const newTime = (value/100)*currentSong.dt/1000;
+        setCurrentTime(newTime);    
+    }
+    const handleUpdateProgress = (value)=>{
+        const newTime = (value/100)*currentSong.dt /1000;
+        setCurrentTime(newTime);
+        audioRef.current.currentTime = newTime;
+        setIsDragging(!isDragging);
+    }
     return (
         <PlayerFooterWrapper>
             <div className='expand'/>
@@ -9,24 +69,25 @@ const PlayerFooter = () => {
                 <PlayerFooterContentWrapper>
                     <div className='play-btns'>
                         <span className='prev' title='上一首(ctrl+<-)'/>
-                        <span className='play-btn' title='播放/暂停(P)'/>
+                        <span className={`play-btn ${isPlaying? 'play':'pause'}`} title='播放/暂停(P)' onClick={handlePlayPause}/>
                         <span className='next' title='下一首(ctrl+->)'/>
                     </div>
                     <div className='img-div content-div'>
-                        <img src="https://s4.music.126.net/style/web2/img/default/default_album.jpg"/>
+                        <img src={getImgSize(currentSong.al.picUrl, 34)}/>
                         <a href='/' className='mask'>cover</a>
                     </div>
                     <div className='play-bar content-div'>
                         <div>
-                            <span className='song-name'>title</span>
-                            <span className='singer-name'>title</span>
+                            <span className='song-name'>{currentSong.name}</span>
+                            <span className='singer-name'>{currentSong.ar[0].name}</span>
                         </div>
                         <div className='progress-com'>
-                        <Slider className='progress-bar' defaultValue={30}  />
+                        <Slider className='progress-bar' value={progress} tooltip={{open:false}} 
+                            onChange={(value)=>handleDragging(value)} onChangeComplete={(value)=>handleUpdateProgress(value)}/>
                         <span className='time-wrapper'>
-                            <em className='current-time'>00:00</em>
+                            <em className='current-time'>{getFormattedTime(currentTime)}</em>
                             <em> / </em>
-                            <em className='duration'>00:00</em>
+                            <em className='duration'>{getFormattedTime(currentSong.dt/1000)}</em>
                         </span>
                         
                         
@@ -56,6 +117,7 @@ const PlayerFooter = () => {
                 </div>
                 <div className='locker-right' />
             </PlayerLockWrapper>
+            <audio ref={audioRef} onTimeUpdate={handleTimeUpdate}/>
         </PlayerFooterWrapper>
     )
 }

@@ -103,9 +103,16 @@ export const PlayerFooterContentWrapper = styled.div`
             width: 36px;
             height: 36px;
             margin-top: 0;
-            background-position: 0 -204px;
-            &:hover{background-position:-40px -204px }
         }
+        .play-btn.pause{
+                background-position: 0 -204px ;
+                &:hover{background-position: -40px -204px;}
+            }
+        .play-btn.play{
+                background-position: 0 -165px ;
+                &:hover{background-position: -40px -165px;}
+            }
+        
         .next{
             background-position: -80px -130px ;
             &:hover{
@@ -118,10 +125,7 @@ export const PlayerFooterContentWrapper = styled.div`
         height: 34px;
         width: 34px;
         margin: 6px 15px 0 0;
-        img{
-            width: 34px;
-            height: 34px;
-        }
+     
         .mask{
             cursor: pointer;
             position: absolute;

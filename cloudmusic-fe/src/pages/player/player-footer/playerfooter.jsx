@@ -4,14 +4,14 @@ import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper } fr
 import { Slider } from 'antd'
 import { getFormattedTime, getImgSize } from '../../../utils/format'
 import {  useEffect, useRef, useState } from 'react'
-import classNames from 'classnames'
-import { fetchPlayLink } from '../../../store/player/player'
+import { fetchLyrics, fetchPlayLink } from '../../../store/player/player'
 
 const PlayerFooter = () => {
 
-    const {currentSong,playLink} = useSelector((state)=>({
+    const {currentSong,playLink, currentLyrics} = useSelector((state)=>({
         currentSong: state.player.currentSong.songs[0],
         playLink:state.player.playLink,
+        currentLyrics: state.player.currentLyrics,
     }))
     const [isPlaying, setIsPlaying] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -21,8 +21,9 @@ const PlayerFooter = () => {
     const dispatch = useDispatch();
 // 获取当前歌曲信息
     useEffect(()=>{
-        if (currentSong?.id) {
+        if (currentSong?.id) {//modify
             dispatch(fetchPlayLink(currentSong.id));
+            dispatch(fetchLyrics(currentSong.id));
           }
     },[currentSong,dispatch])
 // 获取歌曲播放url
@@ -62,6 +63,7 @@ const PlayerFooter = () => {
         audioRef.current.currentTime = newTime;
         setIsDragging(!isDragging);
     }
+    console.log(currentLyrics)
     return (
         <PlayerFooterWrapper>
             <div className='expand'/>

@@ -10,3 +10,12 @@ export async function getPlayLink(id){
     )
     return res.data;
 }
+
+export async function getLyric(id){
+    const res = await request.get("/lyric",{
+        params:{
+            id
+        }
+    })
+    return res.data;
+}

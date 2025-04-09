@@ -4,14 +4,15 @@ import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper } fr
 import { Slider } from 'antd'
 import { getFormattedTime, getImgSize } from '../../../utils/format'
 import {  useEffect, useRef, useState } from 'react'
-import { fetchLyrics, fetchPlayLink } from '../../../store/player/player'
+import { fetchLyrics, fetchPlayLink, setLyricsIndex } from '../../../store/player/player'
 
 const PlayerFooter = () => {
 
-    const {currentSong,playLink, currentLyrics} = useSelector((state)=>({
+    const {currentSong,playLink, currentLyrics, lyricsIndex} = useSelector((state)=>({
         currentSong: state.player.currentSong.songs[0],
         playLink:state.player.playLink,
         currentLyrics: state.player.currentLyrics,
+        lyricsIndex: state.player.lyricsIndex,
     }))
     const [isPlaying, setIsPlaying] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -49,6 +50,20 @@ const PlayerFooter = () => {
             setCurrentTime(audioRef.current.currentTime);
             setProgree(Math.floor(audioRef.current.currentTime*1000*100/currentSong.dt));
         }
+        //按照时间展示歌词, correct place?
+     
+        let index = 0;
+        for(const i in currentLyrics){ // const i 的类型是String, 用Number包裹实现正确的索引和比较
+            // 最后一个的timeStamp也比currentTime小, 所以展示最后一行
+            if(Number(i) === currentLyrics.length-1 || currentLyrics[Number(i)+1]?.timeStamp>currentTime*1000){
+                index = i;
+                break;
+            }
+        }
+        if(index !== lyricsIndex){
+            dispatch(setLyricsIndex(index));
+            console.log(currentLyrics[index].lyric)
+        }
     }
     //
     const handleDragging = (value)=>{
@@ -63,7 +78,7 @@ const PlayerFooter = () => {
         audioRef.current.currentTime = newTime;
         setIsDragging(!isDragging);
     }
-    console.log(currentLyrics)
+   
     return (
         <PlayerFooterWrapper>
             <div className='expand'/>

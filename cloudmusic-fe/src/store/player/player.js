@@ -33,6 +33,7 @@ const playerSlice = createSlice({
         currentSong:tmpData,
         playLink:{},
         currentLyrics:[],  // {timeStamp, lyric}
+        lyricsIndex:0,
     },
     reducers:{
         setCuurentSong(state, {payload}){
@@ -43,10 +44,13 @@ const playerSlice = createSlice({
         },
         setCurrentLyrics(state,{payload}){
             state.currentLyrics = payload;
+        },
+        setLyricsIndex(state, {payload}){
+            state.lyricsIndex = payload;
         }
     }
 
 })
 
-export const {setCuurentSong, setPlayLink, setCurrentLyrics} = playerSlice.actions;
+export const {setCuurentSong, setPlayLink, setCurrentLyrics,setLyricsIndex} = playerSlice.actions;
 export default playerSlice.reducer;

@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux'
 import './style'
-import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper } from './style'
+import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper,ContlBtnsWrapper } from './style'
 import { Slider } from 'antd'
 import { getFormattedTime, getImgSize } from '../../../utils/format'
 import {  useEffect, useRef, useState } from 'react'
-import { fetchLyrics, fetchPlayLink, setLyricsIndex } from '../../../store/player/player'
+import { changePlayMode, fetchLyrics, fetchPlayLink, setLyricsIndex } from '../../../store/player/player'
 
 const PlayerFooter = () => {
 
-    const {currentSong,playLink, currentLyrics, lyricsIndex} = useSelector((state)=>({
-        currentSong: state.player.currentSong.songs[0],
+    const {currentSong,playLink, currentLyrics, lyricsIndex,playMode} = useSelector((state)=>({
+        currentSong: state.player.currentSong,
         playLink:state.player.playLink,
         currentLyrics: state.player.currentLyrics,
         lyricsIndex: state.player.lyricsIndex,
+        playMode: state.player.playMode
     }))
     const [isPlaying, setIsPlaying] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -25,8 +26,9 @@ const PlayerFooter = () => {
         if (currentSong?.id) {//modify
             dispatch(fetchPlayLink(currentSong.id));
             dispatch(fetchLyrics(currentSong.id));
+            console.log(currentSong.id)
           }
-    },[currentSong,dispatch])
+    },[dispatch])
 // 获取歌曲播放url
     useEffect(()=>{
         if(audioRef.current && playLink.length>0){
@@ -49,8 +51,9 @@ const PlayerFooter = () => {
         if(!isDragging){
             setCurrentTime(audioRef.current.currentTime);
             setProgree(Math.floor(audioRef.current.currentTime*1000*100/currentSong.dt));
+            
         }
-        //按照时间展示歌词, correct place?
+        //按照时间展示歌词
      
         let index = 0;
         for(const i in currentLyrics){ // const i 的类型是String, 用Number包裹实现正确的索引和比较
@@ -78,6 +81,10 @@ const PlayerFooter = () => {
         audioRef.current.currentTime = newTime;
         setIsDragging(!isDragging);
     }
+
+    const handlePlayModeChange = ()=>{
+        dispatch(changePlayMode((playMode+1)%3))
+    }
    
     return (
         <PlayerFooterWrapper>
@@ -90,13 +97,15 @@ const PlayerFooter = () => {
                         <span className='next' title='下一首(ctrl+->)'/>
                     </div>
                     <div className='img-div content-div'>
-                        <img src={getImgSize(currentSong.al.picUrl, 34)}/>
+                        <img src={getImgSize(currentSong?.al?.picUrl, 34)}/>
                         <a href='/' className='mask'>cover</a>
                     </div>
                     <div className='play-bar content-div'>
                         <div>
-                            <span className='song-name'>{currentSong.name}</span>
-                            <span className='singer-name'>{currentSong.ar[0].name}</span>
+                            <span className='song-name'>{currentSong?.name}</span>
+                            <span className='singer-name'>{ // 隐式返回
+                                currentSong?.ar?.map((item,index)=>(index === 0? item.name:' / '+item.name))
+                            }</span>
                         </div>
                         <div className='progress-com'>
                         <Slider className='progress-bar' value={progress} tooltip={{open:false}} 
@@ -104,27 +113,29 @@ const PlayerFooter = () => {
                         <span className='time-wrapper'>
                             <em className='current-time'>{getFormattedTime(currentTime)}</em>
                             <em> / </em>
-                            <em className='duration'>{getFormattedTime(currentSong.dt/1000)}</em>
+                            <em className='duration'>{getFormattedTime(currentSong?.dt/1000)}</em>
                         </span>
                         
                         
                         </div>
                     </div>
+                   
                     <div className='operators content-div'>
                         <span className='pip icons' title='画中画歌词'>画中画歌词</span>
                         <span className='collect icons' title='收藏'>收藏</span>
                         <span className='share icons' title='分享'>分享</span>
                     </div>
-                    <div className='ctrl-btns content-div'>
+                    <div className='divider content-div'>|</div>
+                    <ContlBtnsWrapper playMode = {playMode}>
                         <span className='volume icons'/>
-                        <span className='loop icons'/>
+                        <span className='loop icons' onClick={handlePlayModeChange}/>
                         <div className='addto'>
                             <span className='tip'>已添加到播放列表</span>
                     
                             <span className='icn-list icons'>0</span>
                         </div>
                         <span className='quality icons'></span>
-                    </div>
+                    </ContlBtnsWrapper>
                 </PlayerFooterContentWrapper>
             </div>
 

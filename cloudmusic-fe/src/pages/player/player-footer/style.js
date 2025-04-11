@@ -76,6 +76,7 @@ export const PlayerFooterContentWrapper = styled.div`
     width: 1030px;
     height: 47px;
     margin: 0 auto;
+    display: flex;
     .content-div{
         position: relative;
         float: left;
@@ -233,65 +234,90 @@ export const PlayerFooterContentWrapper = styled.div`
             }
         }
     }
-    .ctrl-btns{
-        width: 173px;
-        .volume{
-            background-position: -2px -248px ;
-            &:hover{
-                background-position: -31px -248px;
-            }
-        }
-        .loop{
-            background-position: -3px -344px ;
-            &:hover{
-                background-position: -33px -344px;
-            }
-        }
+    .divider{width:15px;color:#111; align-self: center;}
 
-        .addto{
-            position: relative;
-            zoom: 1;
-            float: left;
-            width: 59px;
-            height: 36px;
-            //还没做
-            .tip{
-                display: none;
-            }
-            .icn-list{
-                display: block;
-                float: none;
-                width: 38px;
-                padding-left: 21px;
-                background-position: -42px -68px;
-                line-height: 27px;
-                text-align: center;
-                color: #666;
-                text-shadow: 0 1px 0 #080707;
-                text-indent: 0;
-                text-decoration: none;
-                &:hover{
-                background-position: -42px -98px;
-                }
-            }
-        }
-        
-        
 
-        .quality{
-            background: url(${quality}) no-repeat;
-            background-size: 45px 30px;
-            margin-left: 4px;
-            width: 41px;
-            margin-top: 9px;
-            &:hover{
-                background: url(${quality_hover}) no-repeat;
-                background-size: 45px 30px;
+`
 
-            }
+export const  ContlBtnsWrapper = styled.div`
+    position: relative;
+    float: left;
+    width: 173px;
+    .volume{
+        background-position: -2px -248px;
+        &:hover{
+            background-position: -31px -248px;
         }
     }
+    .loop{
+        background-position: ${props=>{
+            switch(props.playMode){
+                case 0: //sequential
+                    return '-3px -344px';   
+                case 1://
+                    return '-66px -248px';
+                case 2://
+                    return '-66px -344px';
+                default:
+                    return '-3px -344px';
+            }
+        }}  ;
+        &:hover{//-33px -344px     -93px -344px
+            background-position: ${props=>{
+                switch(props.playMode){
+                    case 0:
+                        return '-33px -344px ';
+                    case 1:
+                        return '-93px -248px';
+                    case 2: 
+                        return '-93px -344px';
+                    default:
+                        return '-33px -344px ';
+                }
+            }};
+        }
+   }
 
+    .addto{
+        position: relative;
+        zoom: 1;
+        float: left;
+        width: 59px;
+        height: 36px;
+            //还没做
+        .tip{
+            display: none;
+        }
+        .icn-list{
+            display: block;
+            float: none;
+            width: 38px;
+            padding-left: 21px;
+            background-position: -42px -68px;
+            line-height: 27px;                
+            text-align: center;
+            color: #666;
+            text-shadow: 0 1px 0 #080707;
+            text-indent: 0;
+            text-decoration: none;
+            &:hover{
+            background-position: -42px -98px;              
+            }
+        }
+    } 
+
+    .quality{
+        background: url(${quality}) no-repeat;            
+        background-size: 45px 30px;
+        margin-left: 4px;
+        width: 41px;            
+        margin-top: 9px;
+        &:hover{
+            background: url(${quality_hover}) no-repeat;            
+            background-size: 45px 30px;
+        }
+    }
+    
 `
 
 

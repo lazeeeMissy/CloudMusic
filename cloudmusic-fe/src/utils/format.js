@@ -4,7 +4,7 @@ export function getImgSize(imgUrl, width, height = width){
 }
 
 export function getFormattedTime(duration){
-    if(duration==null){
+    if(duration === null){
         return "00:00"
     }
     var minute = Math.floor(duration/60);

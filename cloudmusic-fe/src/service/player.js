@@ -19,3 +19,12 @@ export async function getLyric(id){
     })
     return res.data;
 }
+
+export async function getSongDetail(ids){
+    const res = await request.get('/song/detail',{
+        params:{
+            ids
+        }
+    })
+    return res.data;
+}

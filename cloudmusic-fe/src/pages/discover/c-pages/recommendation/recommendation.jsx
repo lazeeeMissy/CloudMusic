@@ -2,7 +2,8 @@ import Banners from "../../../../components/discover-banners/banners";
 import './style'
 import { LeftWrapper, RecmdContent, RecommendationWrapper, RightWrapper,HotWrapperUl } from "./style";
 import AreaTopBar from "../../../../components/recommend-area-topbar/area-topbar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
+import { useMemo } from "react";
 import { useEffect } from "react";
 import { fetchRankListAction, fetchRecommendationData } from "../../../../store/discover/recommend";
 
@@ -26,7 +27,7 @@ const Recommendation = () => {
   useEffect(() => {
     dispatch(fetchRecommendationData());
     dispatch(fetchRankListAction())
-  }, [dispatch])
+  }, [])
 
   
   const {banners, hotPlaylist, newAlbums, rankings} = useSelector((state) => ({
@@ -41,12 +42,15 @@ const Recommendation = () => {
     const shuffled = [...arr];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];//exchange the item
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // exchange the item
     }
     return shuffled;
-  }
+  };
 
-  const randomHotPlaylist = shuffleList(hotPlaylist).slice(0, 8)
+  // 使用 useMemo 来缓存洗牌后的 hotPlaylist
+  const shuffledHotPlaylist = useMemo(() => {
+    return shuffleList(hotPlaylist?.slice(0, 8));
+  }, [hotPlaylist]); // 只有当 hotPlaylist 变化时，才会重新洗牌
 
   return (
     <div>
@@ -57,7 +61,7 @@ const Recommendation = () => {
             <AreaTopBar {...hotRecommendation} />
             <HotWrapperUl>
               {
-                randomHotPlaylist?.map(item => {
+                shuffledHotPlaylist?.map(item => {
                   return (
                     <li  key={item.id} >
                       <div className="hotItem">

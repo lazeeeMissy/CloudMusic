@@ -17,7 +17,7 @@ function App() {
   useEffect(()=>{
     //1918576268
     //185700
-    dispatch(fetchCurrentSong(1918576268))
+    dispatch(fetchCurrentSong(185700))
   },[])
 
   return (

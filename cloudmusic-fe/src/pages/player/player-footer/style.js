@@ -251,7 +251,7 @@ export const  ContlBtnsWrapper = styled.div`
     }
     .loop{
         background-position: ${props=>{
-            switch(props.playMode){
+            switch(props.playmode){
                 case 0: //sequential
                     return '-3px -344px';   
                 case 1://
@@ -264,7 +264,7 @@ export const  ContlBtnsWrapper = styled.div`
         }}  ;
         &:hover{//-33px -344px     -93px -344px
             background-position: ${props=>{
-                switch(props.playMode){
+                switch(props.playmode){
                     case 0:
                         return '-33px -344px ';
                     case 1:

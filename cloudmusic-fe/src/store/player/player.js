@@ -12,14 +12,13 @@ export const fetchCurrentSong = createAsyncThunk("/fetchCurrentSong", (id, {disp
         if(index !== -1){
             dispatch(setCurrentIndex(index));
             dispatch(setCuurentSong(listCopy[index]));
-            console.log(getState().player.currentSong);
         }else{
             getSongDetail(id).then((res)=>{
                 const song = res.songs[0];
                 const privilege = res.privileges[0];
+                console.log("添加新歌")
                 dispatch(addPlayList({song, privilege}));
                 dispatch(setCuurentSong(song));
-                console.log(getState().player.currentSong);
                 dispatch(setCurrentIndex(listCopy.length));
             })
         }
@@ -68,6 +67,9 @@ const playerSlice = createSlice({
         setCuurentSong(state, {payload}){
             state.currentSong = payload;
         },
+        changeCurrentSong(state, {payload}){
+            state.currentSong = state.playList[payload];
+        },
         setPlayLink(state, {payload}){
             state.playLink = payload;
         },
@@ -89,12 +91,13 @@ const playerSlice = createSlice({
         },
         changePlayMode(state, {payload}){
             state.playMode = payload;
-        }
+        },
+    
     }
 
 })
 
 export const {setCuurentSong, setPlayLink, setCurrentLyrics,setLyricsIndex, addPlayList, setCurrentIndex, 
-                changePlayMode
+                changePlayMode, changeCurrentSong
 } = playerSlice.actions;
 export default playerSlice.reducer;

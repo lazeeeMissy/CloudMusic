@@ -1,19 +1,21 @@
 import { useDispatch, useSelector } from 'react-redux'
 import './style'
 import { PlayerFooterWrapper, PlayerLockWrapper, PlayerFooterContentWrapper,ContlBtnsWrapper } from './style'
-import { Slider } from 'antd'
+import { message, Slider } from 'antd'
 import { getFormattedTime, getImgSize } from '../../../utils/format'
 import {  useEffect, useRef, useState } from 'react'
-import { changePlayMode, fetchLyrics, fetchPlayLink, setLyricsIndex } from '../../../store/player/player'
+import { changeCurrentSong, changePlayMode, fetchLyrics, fetchPlayLink, setCurrentIndex, setLyricsIndex } from '../../../store/player/player'
 
 const PlayerFooter = () => {
 
-    const {currentSong,playLink, currentLyrics, lyricsIndex,playMode} = useSelector((state)=>({
+    const {currentSong,playLink, currentLyrics, lyricsIndex,playmode, playList, currentIndex} = useSelector((state)=>({
         currentSong: state.player.currentSong,
         playLink:state.player.playLink,
         currentLyrics: state.player.currentLyrics,
         lyricsIndex: state.player.lyricsIndex,
-        playMode: state.player.playMode
+        playmode: state.player.playMode,
+        playList: state.player.playList,
+        currentIndex: state.player.currentIndex,
     }))
     const [isPlaying, setIsPlaying] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
@@ -21,18 +23,20 @@ const PlayerFooter = () => {
     const [progress, setProgree] = useState(0);
     const audioRef = useRef(null);
     const dispatch = useDispatch();
+    const [messageApi, contextHolder] = message.useMessage();
 // 获取当前歌曲信息
     useEffect(()=>{
         if (currentSong?.id) {//modify
             dispatch(fetchPlayLink(currentSong.id));
             dispatch(fetchLyrics(currentSong.id));
-            console.log(currentSong.id)
           }
-    },[dispatch])
+    },[dispatch, currentSong])
 // 获取歌曲播放url
     useEffect(()=>{
         if(audioRef.current && playLink.length>0){
             audioRef.current.src = playLink[0].url;
+            audioRef.current.load()
+        
         }
     },[playLink])
 // 播放/暂停按钮
@@ -41,7 +45,7 @@ const PlayerFooter = () => {
         if(isPlaying){
             audioRef.current.pause();
         }else{
-            audioRef.current.play();
+            audioRef.current.play().catch(err =>{});
         }
         setIsPlaying(!isPlaying);
 
@@ -54,7 +58,6 @@ const PlayerFooter = () => {
             
         }
         //按照时间展示歌词
-     
         let index = 0;
         for(const i in currentLyrics){ // const i 的类型是String, 用Number包裹实现正确的索引和比较
             // 最后一个的timeStamp也比currentTime小, 所以展示最后一行
@@ -65,7 +68,13 @@ const PlayerFooter = () => {
         }
         if(index !== lyricsIndex){
             dispatch(setLyricsIndex(index));
-            console.log(currentLyrics[index].lyric)
+            message.destroy(currentLyrics[index>0? index-1: index].lyric)
+            messageApi.open({
+                content: currentLyrics[index].lyric,
+                className:'custom-message',
+                duration:0,
+                key: index,
+            })
         }
     }
     //
@@ -83,7 +92,26 @@ const PlayerFooter = () => {
     }
 
     const handlePlayModeChange = ()=>{
-        dispatch(changePlayMode((playMode+1)%3))
+        dispatch(changePlayMode((playmode+1)%3))
+    }
+
+    const handlePlayNext = ()=>{
+        setCurrentTime(0);
+        if(playmode === 0 || playmode === 2){// sequential / single
+            const index = (currentIndex+1)%(playList.length);
+            dispatch(setCurrentIndex(index));
+            dispatch(changeCurrentSong(index));
+        }
+    }
+    const handlePlayPrev = ()=>{
+        setCurrentTime(0);
+        console.log(playList);
+        if(playmode === 0 || playmode === 2){// sequential / single
+            const index = currentIndex === 0? playList.length-1 : (currentIndex-1) %(playList.length);
+            console.log(index)
+            dispatch(setCurrentIndex(index));
+            dispatch(changeCurrentSong(index));
+        }
     }
    
     return (
@@ -92,9 +120,9 @@ const PlayerFooter = () => {
             <div className='content'>
                 <PlayerFooterContentWrapper>
                     <div className='play-btns'>
-                        <span className='prev' title='上一首(ctrl+<-)'/>
+                        <span className='prev' title='上一首(ctrl+<-)' onClick={handlePlayPrev}/>
                         <span className={`play-btn ${isPlaying? 'play':'pause'}`} title='播放/暂停(P)' onClick={handlePlayPause}/>
-                        <span className='next' title='下一首(ctrl+->)'/>
+                        <span className='next' title='下一首(ctrl+->)'  onClick={handlePlayNext}/>
                     </div>
                     <div className='img-div content-div'>
                         <img src={getImgSize(currentSong?.al?.picUrl, 34)}/>
@@ -126,7 +154,7 @@ const PlayerFooter = () => {
                         <span className='share icons' title='分享'>分享</span>
                     </div>
                     <div className='divider content-div'>|</div>
-                    <ContlBtnsWrapper playMode = {playMode}>
+                    <ContlBtnsWrapper playmode = {playmode}>
                         <span className='volume icons'/>
                         <span className='loop icons' onClick={handlePlayModeChange}/>
                         <div className='addto'>
@@ -146,7 +174,9 @@ const PlayerFooter = () => {
                 <div className='locker-right' />
             </PlayerLockWrapper>
             <audio ref={audioRef} onTimeUpdate={handleTimeUpdate}/>
+            {contextHolder}
         </PlayerFooterWrapper>
+        
     )
 }
 
